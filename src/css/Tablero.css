@@ -1,0 +1,22 @@
+
+/* .container{
+    position: static;
+    background-color: rgba(11, 200, 224, 0.26);
+} */
+.contenedorTableroPrincipal{
+    position: unset;
+        background-color:rgb(13, 214, 56);
+        border: 4px solid #0dd638;
+}
+.fichaRoja{
+    width: 55px;
+    height: 55px;
+}
+.fichaAmarilla{
+    width: 55px;
+    height: 55px;
+}
+.fichaVacia{
+    width: 55px;
+    height: 55px;
+}
