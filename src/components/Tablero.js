@@ -7,7 +7,6 @@ import '../css/Tablero.css';
 import { Fragment } from 'react';
 import menu from '../pages/Menu';
 
-
 const cookies = new Cookies();
 
 class Tablero extends Component{
@@ -16,7 +15,8 @@ class Tablero extends Component{
         super(props);
         this.state={
             matrix: [],
-            size : 7
+            size : 7,
+            turn: 1
         }
         this.createMatrix= this.createMatrix.bind(this);
         this.clickHandler=this.clickHandler.bind(this);
@@ -77,7 +77,7 @@ class Tablero extends Component{
     clickHandler = function (click) {  //function to get id of a clicked token
         var index = parseInt(click.target.getAttribute("id"));
         var fondo = this.buscarFondo(index);
-        this.posicionarFicha(fondo, 2);
+        this.posicionarFicha(fondo, this.state.turn);
     }
 
     posicionarFicha(index, color) {
@@ -87,6 +87,11 @@ class Tablero extends Component{
         } else {
             // change the state of the matrix
             this.state.matrix[index] = color;
+            if (color == 1) {
+                this.state.turn = 2;
+            } else {
+                this.state.turn = 1;
+            }
         }
     }
 
