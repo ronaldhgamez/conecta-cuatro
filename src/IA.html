@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<title>Web Page Design</title>
+<head>
+<script>
+
+var matrix = [
+    1,0,0,0,0,0,1,
+    1,2,0,0,0,1,1,
+    1,2,0,0,0,1,1,
+    1,2,0,0,0,1,1,
+    1,1,0,0,0,1,2,
+    1,2,2,0,0,1,2,
+    1,1,1,0,1,1,2   
+];
+
+var n = 7;
+
+function isInitialMove(color) {
+    var size = matrix.length;
+    for (var i=(size-1); i >= 0; i--) {
+        // There are one file already
+        if (matrix[i] == color) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Retorna un entero aleatorio entre min (incluido) y max (excluido)
+// ¡Usando Math.round() te dará una distribución no-uniforme!
+function getRandomInt(min, max) {
+    var random;
+    do {
+        random = Math.floor(Math.random() * (max - min)) + min;
+    } while (matrix[random] != 0);
+    return random;
+}
+
+function addToObject(dict, e) {
+    if (dict.hasOwnProperty(e)) {
+        dict[e] += 1;
+    } else {
+        dict[e] = 1;
+    }
+    return dict;
+}
+
+function printObject(dict) {
+    document.write(JSON.stringify(dict, null, 4));
+    console.log(JSON.stringify(dict, null, 4));
+}
+
+function verticalMoves(rivalColor) {
+    var winMoves = {};
+    document.write("<br>Vertical");
+    var c = 0;
+
+    // 
+    for (var i=(matrix.length - 1); i >= (matrix.length - n); i--) {
+        let j = i;
+        let count = 0;
+        // mientras no se salga y sea del mismo color
+        while((j - n) >= 0 && matrix[j] != 0) {
+            
+            if (matrix[j] == rivalColor) {
+                count += 1;
+            } else {
+                count = 0;
+            }
+            
+            j -= n;
+            
+            if (count >= 3 && matrix[j] == 0) {
+                document.write("<br>[win i: " + j + "]");
+                winMoves = addToObject(winMoves, j); // añade indice al gane
+            }
+        }
+    }
+    return winMoves;
+}
+
+// falta cuando la matriz está algo así: 0,1,1,0,1
+// solo valida que hayan tres 1 seguidos
+function horizontalMoves(rivalColor) {
+    var winMoves = {};
+    
+    var c = 0;
+    document.write("<br><br>Horizontal")
+    // LINEA A LINEA
+    for (var i=(matrix.length - 1); i >= (n - 1); i-=n) {
+        //document.write(" i: " + i);
+        
+        
+        let j = i;
+        let count = 0;
+        //document.write(" {");
+        // mientras no se salga y sea del mismo color
+        while((i - (n - 1)) >= 0 && j != (i-n)) {
+            //document.write(j + ", ");
+            
+            if (matrix[j] == rivalColor) {
+                count += 1;
+            } else {
+                count = 0;
+            }
+            
+            j--;
+            
+            // para validar si puede ganar por ambos lados
+            if (count == 3) {
+                // puede ganar por la derecha? valida extremo derecho
+                if (j + 3 <= i) {
+                    // caso gana por la derecha en la última fila
+                    if (i == (matrix.length - 1) && matrix[j+4] == 0) {
+                        document.write("<br>[win: " + (j+4) + "]");
+                        winMoves = addToObject(winMoves, (j+4)); // añade indice al gane
+                    }
+                    
+                    // caso gana por la derecha demás filas (valida que la columna de abajo tenga ficha)
+                    else if (matrix[j+4] == 0 && matrix[j + 4 + n] != 0) { // caso demás filas
+                        document.write("<br>[win: " + (j + 4) + "]");
+                        winMoves = addToObject(winMoves, (j+4)); // añade indice al gane
+                    }
+                }
+                
+                // puede ganar por la izquierda? valida extremo izquierdo que no se pase
+                if (j >= (i - (n - 1))) {
+                    // caso gana por la izquierda en la última fila
+                    if (i == (matrix.length - 1) && matrix[j] == 0) {
+                        document.write("<br>[win: " + j + "]");
+                        winMoves = addToObject(winMoves, j); // añade indice al gane
+                    }
+                    
+                    // caso gana izquierda demás filas (valida que la columna de abajo tenga ficha)
+                    else if (matrix[j] == 0 && matrix[j + n] != 0) { // caso demás filas
+                        document.write("<br>[win: " + j + "]");
+                        winMoves = addToObject(winMoves, j); // añade indice al gane
+                    }
+                }
+                count = 0;
+            }
+            
+        }
+    }
+    
+    return winMoves;
+}
+
+
+function diagonalMoves(rivalColor) {
+    var winMoves = {};
+
+    return winMoves;
+}
+
+// Returns {} if the opposing opponent has no move
+// or returns the indexes to block the rival
+function searchWinMoves(color) {
+    
+    // object of index in where the opponent can win
+    var winMoves = {};
+
+    // VERTICAL MOVES
+    var arrayIndexWin = verticalMoves(color);
+    if (Object.keys(arrayIndexWin).length > 0) {
+        // Merge Objects: add the posibles moves to winMoves
+        winMoves = Object.assign(winMoves, arrayIndexWin);
+    }   
+    
+    // HORIZONTAL MOVES
+    arrayIndexWin = horizontalMoves(color);
+    if (Object.keys(arrayIndexWin).length > 0) {
+        // Merge Objects: add the posibles moves to winMoves
+        winMoves = Object.assign(winMoves, arrayIndexWin);
+    }
+    
+    // DIAGONAL MOVES
+    arrayIndexWin = diagonalMoves(color);
+    if (Object.keys(arrayIndexWin).length > 0) {
+        // Merge Objects: add the posibles moves to winMoves
+        winMoves = Object.assign(winMoves, arrayIndexWin);
+    }
+    return winMoves;
+}
+
+function bestOptionToWin(winMoves) {
+    // buscar el indice apropiado
+    var index = -1;
+    var total = 0; // veces que puede ganar con ese indice
+    for(var key in winMoves) {
+        if (winMoves[key] > total) {
+            total = winMoves[key];
+            index = parseInt(key);
+        }
+    }
+    return index;
+}
+
+function nextMove(cpuColor) {
+    // la idea sería hacer jugadas dobles
+    
+    // buscar todos los posibles indices donde se puede insertar ficha
+    var indexes = allPosiblesIndex();
+
+    // 
+    
+    return -4;
+}
+
+function allPosiblesIndex() {
+    var indexes = [];
+    for (var i=(matrix.length - 1); i >= (matrix.length - n); i--) {
+        let j = i;
+        // mientras no se salga y sea del mismo color
+        while(j >= 0) {
+            if (matrix[j] == 0) {
+                indexes.push(j); // add posible index
+                break;
+            }
+            j -= n;
+        }
+    }
+    return indexes;
+}
+
+// 
+function CPU_IA(cpuColor, rivalColor) {
+
+    // INITIAL MOVE
+    if(isInitialMove(cpuColor) == true) {
+        return getRandomInt((n * n - n), (n * n)); // random index choice
+    }
+
+    // VERIFIES IF CPU CAN WIN
+    var winMoves = {};
+    winMoves = searchWinMoves(cpuColor);
+    if (Object.keys(winMoves).length > 0) {
+        return bestOptionToWin(winMoves);
+    }
+
+    // TO BLOCK OPPONENT MOVES
+    winMoves = searchWinMoves(rivalColor);
+    if (Object.keys(winMoves).length > 0) {
+        return bestOptionToWin(winMoves);
+    }
+
+    // TO SEARCH NEXT MOVE
+    var index = nextMove(cpuColor);
+
+    return -2;
+}
+
+// 1: amarillo
+// 2: rojo
+function sayHello() {
+    // buscar movimiento siguiente
+    // 0. si no hay fichas tirar al azar
+    // 0.1 VERIFICA SI TIENE MOVIMIENTOS DE GANE
+    // 1. buscar jugadas enemigas(INDICE) (falta diagonal)
+    // 1.2. si las hay bloquear la mejor
+
+    // 2. buscar posición para jugar (next move)
+    // 3. Validar si esa posicion le da gane al contrario
+    // 3.1 si si: buscar otra jugada
+    // 3.2 si no: retornar indice
+    
+   //var next = CPU_IA();
+   
+   /*
+   for(var key in dict) {
+        var value = dict[key];
+        total += parseInt(key);
+        // do something with "key" and "value" variables
+        //document.write(" - key: " + key + " value: " + value);
+    }
+    */
+
+    
+    var dict = {};
+    var rivalColor = 1;
+    dict = verticalMoves(rivalColor);
+    //dict = horizontalMoves(rivalColor);
+    dict = Object.assign(dict, horizontalMoves(rivalColor));
+    document.write("<br>Ganes:<br>");
+    printObject(dict);
+    
+}
+
+sayHello();
+</script>
+</head>
+<body>
+</body>
+</html>

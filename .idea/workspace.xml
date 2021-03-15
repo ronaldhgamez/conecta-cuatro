@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5b25c3a9-c9df-494e-95fa-499a7603f693" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1oz0woLbC4fVcvtuu6cFW6rWDTB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../crudAntDesign-master/src/App.js" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Dell\Desktop\C. A\1 Semestre 2021\Diseño de Software\proyecto\src\pages" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5b25c3a9-c9df-494e-95fa-499a7603f693" name="Default Changelist" comment="" />
+      <created>1614274353098</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1614274353098</updated>
+      <workItem from="1614274358780" duration="1653000" />
+      <workItem from="1614293660442" duration="10083000" />
+      <workItem from="1614385305916" duration="2694000" />
+      <workItem from="1614398648708" duration="596000" />
+      <workItem from="1614442447720" duration="2670000" />
+      <workItem from="1614813109502" duration="1577000" />
+      <workItem from="1614890762839" duration="2349000" />
+      <workItem from="1614900416766" duration="4856000" />
+      <workItem from="1614961894294" duration="1416000" />
+      <workItem from="1614985101332" duration="6562000" />
+      <workItem from="1614991950706" duration="2540000" />
+      <workItem from="1614994742047" duration="7388000" />
+      <workItem from="1615069065480" duration="19343000" />
+      <workItem from="1615132506885" duration="5879000" />
+      <workItem from="1615138535817" duration="450000" />
+      <workItem from="1615263265470" duration="3430000" />
+      <workItem from="1615303539135" duration="3189000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
