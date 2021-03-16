@@ -5,13 +5,13 @@
 <script>
 
 var matrix = [
-    1,0,0,0,0,0,1,
-    1,2,0,0,0,1,1,
-    1,2,0,0,0,1,1,
-    1,2,0,0,0,1,1,
-    1,1,0,0,0,1,2,
-    1,2,2,0,0,1,2,
-    1,1,1,0,1,1,2   
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,
+    0,0,0,0,0,2,0,
+    0,0,0,0,0,2,0,
+    0,0,0,1,0,2,0,
+    0,0,1,2,2,1,1
 ];
 
 var n = 7;
@@ -53,7 +53,7 @@ function printObject(dict) {
 
 function verticalMoves(rivalColor) {
     var winMoves = {};
-    document.write("<br>Vertical");
+    //document.write("<br>Vertical");
     var c = 0;
 
     // 
@@ -72,7 +72,7 @@ function verticalMoves(rivalColor) {
             j -= n;
             
             if (count >= 3 && matrix[j] == 0) {
-                document.write("<br>[win i: " + j + "]");
+                //document.write("<br>[win i: " + j + "]");
                 winMoves = addToObject(winMoves, j); // añade indice al gane
             }
         }
@@ -86,7 +86,7 @@ function horizontalMoves(rivalColor) {
     var winMoves = {};
     
     var c = 0;
-    document.write("<br><br>Horizontal")
+    //document.write("<br><br>Horizontal")
     // LINEA A LINEA
     for (var i=(matrix.length - 1); i >= (n - 1); i-=n) {
         //document.write(" i: " + i);
@@ -113,13 +113,13 @@ function horizontalMoves(rivalColor) {
                 if (j + 3 <= i) {
                     // caso gana por la derecha en la última fila
                     if (i == (matrix.length - 1) && matrix[j+4] == 0) {
-                        document.write("<br>[win: " + (j+4) + "]");
+                        //document.write("<br>[win: " + (j+4) + "]");
                         winMoves = addToObject(winMoves, (j+4)); // añade indice al gane
                     }
                     
                     // caso gana por la derecha demás filas (valida que la columna de abajo tenga ficha)
                     else if (matrix[j+4] == 0 && matrix[j + 4 + n] != 0) { // caso demás filas
-                        document.write("<br>[win: " + (j + 4) + "]");
+                        //document.write("<br>[win: " + (j + 4) + "]");
                         winMoves = addToObject(winMoves, (j+4)); // añade indice al gane
                     }
                 }
@@ -128,13 +128,13 @@ function horizontalMoves(rivalColor) {
                 if (j >= (i - (n - 1))) {
                     // caso gana por la izquierda en la última fila
                     if (i == (matrix.length - 1) && matrix[j] == 0) {
-                        document.write("<br>[win: " + j + "]");
+                        //document.write("<br>[win: " + j + "]");
                         winMoves = addToObject(winMoves, j); // añade indice al gane
                     }
                     
                     // caso gana izquierda demás filas (valida que la columna de abajo tenga ficha)
                     else if (matrix[j] == 0 && matrix[j + n] != 0) { // caso demás filas
-                        document.write("<br>[win: " + j + "]");
+                        //document.write("<br>[win: " + j + "]");
                         winMoves = addToObject(winMoves, j); // añade indice al gane
                     }
                 }
@@ -184,6 +184,7 @@ function searchWinMoves(color) {
     return winMoves;
 }
 
+// es innecesaria??
 function bestOptionToWin(winMoves) {
     // buscar el indice apropiado
     var index = -1;
@@ -195,17 +196,6 @@ function bestOptionToWin(winMoves) {
         }
     }
     return index;
-}
-
-function nextMove(cpuColor) {
-    // la idea sería hacer jugadas dobles
-    
-    // buscar todos los posibles indices donde se puede insertar ficha
-    var indexes = allPosiblesIndex();
-
-    // 
-    
-    return -4;
 }
 
 function allPosiblesIndex() {
@@ -222,6 +212,161 @@ function allPosiblesIndex() {
         }
     }
     return indexes;
+}
+
+
+// retorna indice del indice del tablero donde tiene mas chance de ganar
+// se puede armar jugada de gane? (tres fichas y una vacia)
+function simulatePosiblesMoves(cpuColor) {
+    
+    // buscar todos los posibles indices donde se puede insertar ficha
+    var indexes = allPosiblesIndex(); // [i, i, i, i]
+    var size = indexes.length;
+
+    var best = -1; // best index to move
+    var times = -1; // total of times that the player can win
+    
+    // Simulate every posible index
+    for(var i=0; i < size; i++) {
+        matrix[indexes[i]] = cpuColor; // se simula poner fichas en los indices que se pueden
+        //document.write("<br>-----------------------------<br>");
+        //document.write("<br>simulating " + indexes[i] + "<br>");
+        // once its simulate, it searches posibles wins
+        var posiblesWin = searchWinMoves(cpuColor);
+        
+        if (Object.keys(posiblesWin).length > 0) {
+
+            //document.write("<br><br>posibles win: ");
+            printObject(posiblesWin);
+            //document.write("<br>");
+
+            var timesTemp = 0; // total times that can win
+            for (var key in posiblesWin) {
+                //document.write("<br>Can win in " + key + " " + posiblesWin[key] + " times <br>");
+                timesTemp += posiblesWin[key];
+            }
+            //document.write("<br>total final times " + timesTemp + " <br>");
+            
+            if (timesTemp > times) {
+                times = timesTemp;
+                best = indexes[i];
+                //document.write("<br> is better <br>");
+            } else {
+                //document.write("<br> but isn't better <br>");
+            }
+
+        } else{
+            //document.write("<br> nothing <br>");
+        }
+
+        matrix[indexes[i]] = 0; // restablece a como estaba antes para
+    }
+
+    //document.write("<br>but the final best index is: " + best + "<br>");
+    return best; // returns -1 if there is no options
+}
+
+// Receives an index and returns its neighboring indices vertically, 
+// horizontally and diagonally.
+function neighbors(index, color) {
+    
+    var neigborsIndeces = [];
+
+    let row = Math.trunc(index / n); // Represents the index row
+    
+    // Vertical neighboring
+    //if (row > 0) // First row does not count
+        //neigborsIndeces.push(index - 7);
+
+    // Horizontal neighborings
+    /*
+    let tempIndex = index - 1;
+    let tempRow = Math.trunc(tempIndex / n);
+
+    // To the left
+    let shift = 2;
+    while (row == tempRow && shift > 0) {
+        // If found a blocking checker
+        if (matrix[tempIndex] != 0 && matrix[tempIndex] != color)
+            break;
+        if (matrix[tempIndex] == 0 || matrix[tempIndex] == color)
+            neigborsIndeces.push(tempIndex);
+    
+        tempIndex--;
+        tempRow = Math.trunc(tempIndex / n);    
+        shift--;
+    }
+    // To the right
+    tempIndex = index + 1;
+    tempRow = Math.trunc(tempIndex / n);
+
+    shift = 2;
+    while (row == tempRow && shift > 0) {
+        // If found a blocking checker
+        if (matrix[tempIndex] != 0 && matrix[tempIndex] != color)
+            break;
+        if (matrix[tempIndex] == 0 || matrix[tempIndex] == color)
+            neigborsIndeces.push(tempIndex);
+    
+        tempIndex++;
+        tempRow = Math.trunc(tempIndex / n);    
+        shift--;
+    }
+    */
+
+    // Diagonal neighborings
+    // To the (index - (n - 1)) up/right
+    /*
+    tempIndex = index - (n - 1);
+    tempRow = Math.trunc(tempIndex / n); // 0
+    upRow = tempRow - 1; // -1
+
+    if (Math.trunc(index / n) != tempRow) {
+        if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && (upRow == (tempRow - 1))) {
+            neigborsIndeces.push(tempIndex);
+
+            tempIndex = tempIndex - (n - 1);
+            tempRow = Math.trunc(tempIndex / n); // 
+            upRow--; // 2
+            if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && upRow == (tempRow - 1)) {
+                neigborsIndeces.push(tempIndex);
+            }
+        }
+    }*/
+
+    // To the (index - (n - 1)) up/right
+    tempIndex = index - (n + 1); // 20
+    tempRow = Math.trunc(tempIndex / n); // 2
+    upRow = tempRow - 1; // 1
+
+    if (Math.trunc(index / n) != (tempRow + 2)) {
+        if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && (upRow == (tempRow - 1))) {
+            neigborsIndeces.push(tempIndex);
+
+            tempIndex = tempIndex - (n + 1);
+            tempRow = Math.trunc(tempIndex / n); // 
+            upRow--; // 2
+            if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && upRow == (tempRow - 1)) {
+                neigborsIndeces.push(tempIndex);
+            }
+        }
+    }
+ 
+    return neigborsIndeces;
+}
+
+function nextMove(cpuColor) {
+    // la idea sería hacer jugadas dobles
+    
+    // se puede armar jugada de gane? (tres fichas y una vacia)
+    var index = simulatePosiblesMoves(cpuColor);
+    if (index != -1) {
+        return index;
+    }
+
+    // armar jugada de dos (dos fichas )
+    
+    return -4;
 }
 
 // 
@@ -246,50 +391,65 @@ function CPU_IA(cpuColor, rivalColor) {
     }
 
     // TO SEARCH NEXT MOVE
-    var index = nextMove(cpuColor);
-
-    return -2;
+    return nextMove(cpuColor);
 }
 
+function printMatrix() {
+    var c = 0;
+    for (var i=0; i<matrix.length; i++) {;
+        text = matrix[i] + "  |  ";
+        
+        //document.getElementById("demo").innerHTML = ;
+        document.write(text);
+
+        c++;
+        if(c==n) {
+            document.write("<br>");
+            c=0;
+        }
+    }
+
+    document.write("<br>");
+}
 // 1: amarillo
 // 2: rojo
-function sayHello() {
-    // buscar movimiento siguiente
-    // 0. si no hay fichas tirar al azar
-    // 0.1 VERIFICA SI TIENE MOVIMIENTOS DE GANE
-    // 1. buscar jugadas enemigas(INDICE) (falta diagonal)
-    // 1.2. si las hay bloquear la mejor
+// buscar movimiento siguiente
+// 0. si no hay fichas tirar al azar
+// 0.1 VERIFICA SI TIENE MOVIMIENTOS DE GANE
+// 1. buscar jugadas enemigas(INDICE) (falta diagonal)
+// 1.2. si las hay bloquear la mejor
 
-    // 2. buscar posición para jugar (next move)
-    // 3. Validar si esa posicion le da gane al contrario
-    // 3.1 si si: buscar otra jugada
-    // 3.2 si no: retornar indice
+// 2. buscar posición para jugar (next move)
+// 3. Validar si esa posicion le da gane al contrario
+// 3.1 si si: buscar otra jugada
+// 3.2 si no: retornar indice
+
+var turn = 1;
+
+function makeMove() {
     
-   //var next = CPU_IA();
-   
-   /*
-   for(var key in dict) {
-        var value = dict[key];
-        total += parseInt(key);
-        // do something with "key" and "value" variables
-        //document.write(" - key: " + key + " value: " + value);
+    var contrario;
+    var index;
+    var ant = turn;
+
+    if (turn==1){
+        index = CPU_IA(turn, 2);
+        matrix[index] = turn;
+    }else{
+        index = CPU_IA(turn, 1);
+        matrix[index] = turn;
     }
-    */
 
-    
-    var dict = {};
-    var rivalColor = 1;
-    dict = verticalMoves(rivalColor);
-    //dict = horizontalMoves(rivalColor);
-    dict = Object.assign(dict, horizontalMoves(rivalColor));
-    document.write("<br>Ganes:<br>");
-    printObject(dict);
+    turn = (turn == 1) ? 2 : 1;
+
+    printMatrix();
+    return "Se tiró ficha " + ant + " en indice " + index;
     
 }
 
-sayHello();
 </script>
 </head>
 <body>
+
 </body>
 </html>
