@@ -8,10 +8,10 @@ var matrix = [
     0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,
-    0,0,0,0,0,2,0,
-    0,0,0,0,0,2,0,
-    0,0,0,1,0,2,0,
-    0,0,1,2,2,1,1
+    0,0,0,2,0,0,0,
+    0,0,0,1,0,1,0,
+    1,2,0,1,0,2,0,
+    2,1,1,1,2,1,0
 ];
 
 var n = 7;
@@ -266,6 +266,11 @@ function simulatePosiblesMoves(cpuColor) {
     return best; // returns -1 if there is no options
 }
 
+// Validate if the index is a empty space and if has a checker below
+function isEmptyAndValid(tempIndex) {
+    return (matrix[tempIndex] == 0 && matrix[tempIndex + n] != 0) ? true : false;
+}
+
 // Receives an index and returns its neighboring indices vertically, 
 // horizontally and diagonally.
 function neighbors(index, color) {
@@ -274,12 +279,12 @@ function neighbors(index, color) {
 
     let row = Math.trunc(index / n); // Represents the index row
     
-    // Vertical neighboring
-    //if (row > 0) // First row does not count
-        //neigborsIndeces.push(index - 7);
+    //////////////// Vertical neighboring ////////////////
+    if (row > 0) // First row does not count
+        neigborsIndeces.push(index - 7);
 
-    // Horizontal neighborings
-    /*
+    //////////////// Horizontal neighborings ////////////////
+    
     let tempIndex = index - 1;
     let tempRow = Math.trunc(tempIndex / n);
 
@@ -289,7 +294,7 @@ function neighbors(index, color) {
         // If found a blocking checker
         if (matrix[tempIndex] != 0 && matrix[tempIndex] != color)
             break;
-        if (matrix[tempIndex] == 0 || matrix[tempIndex] == color)
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)
             neigborsIndeces.push(tempIndex);
     
         tempIndex--;
@@ -305,54 +310,131 @@ function neighbors(index, color) {
         // If found a blocking checker
         if (matrix[tempIndex] != 0 && matrix[tempIndex] != color)
             break;
-        if (matrix[tempIndex] == 0 || matrix[tempIndex] == color)
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)
             neigborsIndeces.push(tempIndex);
     
         tempIndex++;
         tempRow = Math.trunc(tempIndex / n);    
         shift--;
     }
-    */
+    
 
-    // Diagonal neighborings
+
+    //////////////// Diagonal neighborings ////////////////
+
     // To the (index - (n - 1)) up/right
-    /*
-    tempIndex = index - (n - 1);
-    tempRow = Math.trunc(tempIndex / n); // 0
-    upRow = tempRow - 1; // -1
+    let indexRow = Math.trunc(index / n);
+    // Ignore column 0 and first row
+    if (indexRow > 0 && index != (n * indexRow + (n - 1))) {
+        tempIndex = index - (n - 1);
+        let block = false;
 
-    if (Math.trunc(index / n) != tempRow) {
-        if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && (upRow == (tempRow - 1))) {
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color) {
             neigborsIndeces.push(tempIndex);
-
-            tempIndex = tempIndex - (n - 1);
-            tempRow = Math.trunc(tempIndex / n); // 
-            upRow--; // 2
-            if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && upRow == (tempRow - 1)) {
-                neigborsIndeces.push(tempIndex);
-            }
+        } else {
+            if (matrix[tempIndex] != 0)
+                block = true;
         }
-    }*/
 
-    // To the (index - (n - 1)) up/right
-    tempIndex = index - (n + 1); // 20
-    tempRow = Math.trunc(tempIndex / n); // 2
-    upRow = tempRow - 1; // 1
-
-    if (Math.trunc(index / n) != (tempRow + 2)) {
-        if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && (upRow == (tempRow - 1))) {
+        indexRowAnt = Math.trunc(tempIndex / n);
+        tempIndex = tempIndex - (n - 1);
+        indexRowSig = Math.trunc(tempIndex / n);
+        
+        if (!block && (indexRowAnt != indexRowSig) && (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)) {
             neigborsIndeces.push(tempIndex);
+        }
+    }
 
-            tempIndex = tempIndex - (n + 1);
-            tempRow = Math.trunc(tempIndex / n); // 
-            upRow--; // 2
-            if ((matrix[tempIndex] == 0 || matrix[tempIndex] == color) && upRow == (tempRow - 1)) {
-                neigborsIndeces.push(tempIndex);
-            }
+    // To the (index - (n + 1)) up/left
+    indexRow = Math.trunc(index / n);
+    // Ignore column 0 and first row
+    if (indexRow > 0 && index != n * indexRow) {
+        tempIndex = index - (n + 1);
+        let block = false;
+
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color) {
+            neigborsIndeces.push(tempIndex);
+        } else {
+            if (matrix[tempIndex] != 0)
+                block = true;
+        }
+
+        indexRowAnt = Math.trunc(tempIndex / n);
+        tempIndex = tempIndex - (n + 1);
+        indexRowSig = Math.trunc(tempIndex / n);
+        
+        if (!block && (indexRowAnt != indexRowSig) && (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)) {
+            neigborsIndeces.push(tempIndex);
+        }
+    }
+
+
+
+    // To the (index + (n - 1)) down/left
+    indexRow = Math.trunc(index / n);
+    // Ignore column 0 and last row
+    if (indexRow < (n-1) && index != n * indexRow) {  
+        
+        tempIndex = index + (n - 1);
+        let block = false;
+
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color) {
+            neigborsIndeces.push(tempIndex);
+        } else {
+            if (matrix[tempIndex] != 0)
+                block = true;
+        }
+
+        indexRowAnt = Math.trunc(tempIndex / n);
+        tempIndex = tempIndex + (n - 1);
+        indexRowSig = Math.trunc(tempIndex / n);
+        
+        if (!block && (indexRowAnt != indexRowSig) && (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)) {
+            neigborsIndeces.push(tempIndex);
         }
     }
  
+
+
+    // To the (index + (n + 1)) down/right
+    // raro el 26  
+    indexRow = Math.trunc(index / n);
+    // Ignore column (n - 1) and last row
+    if (indexRow < (n-1) && index != (n * indexRow + (n - 1))) {
+        
+        tempIndex = index + (n + 1);
+        let block = false;
+
+        if (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color) {
+            neigborsIndeces.push(tempIndex);
+        } else {
+            if (matrix[tempIndex] != 0)
+                block = true;
+        }
+        indexRowAnt = Math.trunc(tempIndex / n);
+        tempIndex = tempIndex + (n + 1);
+        indexRowSig = Math.trunc(tempIndex / n);
+        
+        if (!block && (indexRowAnt != indexRowSig) && (isEmptyAndValid(tempIndex) || matrix[tempIndex] == color)) {
+            neigborsIndeces.push(tempIndex);
+        }
+    }
+
     return neigborsIndeces;
+}
+
+function allNeighbors() {
+    var a = allPosiblesIndex();
+    for (var i=0; i < a.length; i++) {
+        // amarrillo
+        var n1 = neighbors(a[i], 1);
+        // rojo
+        var n2 = neighbors(a[i], 2);
+        console.log("vecinos de amarillo, indice: " + a[i]);
+        console.log(n1);
+        console.log("vecinos de rojo, indice: " + a[i]);
+        console.log(n2);
+    }
 }
 
 function nextMove(cpuColor) {
