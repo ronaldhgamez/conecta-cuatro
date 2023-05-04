@@ -1,0 +1,82 @@
+body {
+  background-color: yellowgreen;
+}
+
+.board-container {
+  /* center the board container, and at the top 5% */
+  margin: 5% auto;
+  display: flex;
+  width: 550px;
+  height: 530px;
+  background-color: rgb(0, 47, 255);
+  border-radius: 15px;
+  /* Inset Shadow */
+  box-shadow: 0 0 6px blue inset;
+  box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+#board {
+  margin: auto;
+  background-color: rgb(0, 0, 255);
+  border-radius: 15px;
+  /* Shadow to the board */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1) inset;
+}
+
+
+tr {
+  display: flex;
+  /* padding between tr's */
+  padding: 10px;
+  width: 500px;
+  justify-content: space-around;
+}
+
+td {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: dodgerblue;
+  opacity: 0.5;
+  /* sombra interna del circulo */
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.5),
+    inset 0px -3px 3px rgba(255, 255, 255, 0.5);
+}
+
+.player1 {
+  background-color: yellow;
+  opacity: 0.9;
+}
+
+.player2 {
+  background-color: red;
+  opacity: 0.9;
+}
+
+.selected {
+  /* Light of circle (right, left, down, up) */
+  box-shadow: 10px 0px 15px white,
+    -10px 0px 15px white,
+    0px 10px 15px white,
+    0px -10px 15px white,
+    /* sombra interna del circulo */
+    inset 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#startButton {
+  width: 200px;
+  height: 60px;
+  background-color: white;
+  opacity: 0.5;
+}
+
+#startButton:hover {
+  background-color: yellowgreen;
+}
