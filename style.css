@@ -43,12 +43,21 @@ td {
     inset 0px -3px 3px rgba(255, 255, 255, 0.5);
 }
 
-.player1 {
+td:hover {
+  box-shadow: 10px 0px 15px white,
+    -10px 0px 15px white,
+    0px 10px 15px white,
+    0px -10px 15px white,
+    /* sombra interna del circulo */
+    inset 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+td[color="yellow"] {
   background-color: yellow;
   opacity: 0.9;
 }
 
-.player2 {
+td[color="red"] {
   background-color: red;
   opacity: 0.9;
 }
