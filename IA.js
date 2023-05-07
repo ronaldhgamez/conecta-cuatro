@@ -40,7 +40,7 @@ var matrix = [
 
 // estado corregir que gana con el movimiento contrario
 
-var n = 7;
+/* var n = 7;
 var matrix = [
     0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 
@@ -48,7 +48,7 @@ var matrix = [
     0, 0, 0, 1, 1, 1, 0, 
     0, 0, 0, 1, 1, 2, 0, 
     0, 2, 2, 2, 1, 2, 2, 
-    2, 1, 1, 1, 2, 2, 1];
+    2, 1, 1, 1, 2, 2, 1]; */
 
 
 
@@ -760,7 +760,7 @@ function CPU_IA(cpuColor, rivalColor) {
     var winIndices = {};
     winIndices = searchWinningsIndices(cpuColor);
     if (Object.keys(winIndices).length > 0) {
-        console.log("Gana la compu :)...");
+        alert("Gana la compu :)...");
         return bestOptionToWin(winIndices);
     }
 

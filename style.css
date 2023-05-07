@@ -4,7 +4,7 @@ body {
 
 .board-container {
   /* center the board container, and at the top 5% */
-  margin: 5% auto;
+  margin: 3% auto;
   display: flex;
   width: 550px;
   height: 530px;
@@ -50,6 +50,7 @@ td:hover {
     0px -10px 15px white,
     /* sombra interna del circulo */
     inset 0px 2px 2px rgba(0, 0, 0, 0.5);
+    /* opacity: 1; */
 }
 
 td[color="yellow"] {
@@ -80,12 +81,26 @@ td[color="red"] {
 
 
 #startButton {
-  width: 200px;
-  height: 60px;
-  background-color: white;
-  opacity: 0.5;
+  width: 100px;
+  height: 40px;
+  background-color: rgb(0, 0, 255);
+  font-weight: bold;
+  color: white;
+  opacity: 0.8;
 }
 
 #startButton:hover {
-  background-color: yellowgreen;
+  background-color: dodgerblue;
+}
+
+.circle {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 9999; /* valor alto para superponer otros elementos */
+  pointer-events: none; /* permitir que los clics pasen a través del círculo */
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.5),
+    inset 0px -3px 3px rgba(255, 255, 255, 0.5);
 }
