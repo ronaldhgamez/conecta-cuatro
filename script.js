@@ -10,7 +10,6 @@ const DISKS = {
   YELLOW: "yellow"
 }
 
-
 class Game {
 
   constructor() {
@@ -19,6 +18,7 @@ class Game {
     this.cpuColor = DISKS.RED;
     this.state = states.INITIAL;
     this.shape = 7;
+    this.moves = 0;
   }
 
   // Generates a random number between 1 and 2
@@ -61,6 +61,8 @@ class Game {
     else {
       circle.style.opacity = 0;
       this.currentPlayer = this.cpuColor;
+      game.moves++;
+      document.getElementById('moves').innerHTML = 'Moves: ' + game.moves;
 
       // Vakes computer move
       await sleep(1500);
@@ -74,7 +76,6 @@ class Game {
     return (this.state == states.OVER) ? true : false
   }
 }
-
 
 
 
@@ -120,6 +121,13 @@ async function transition(indexes, color) {
   return false;
 }
 
+function render() {
+
+  matrix.map((elem, index) => {
+    document.getElementById(index + "").setAttribute("color", elem)
+  })
+
+}
 
 const getBottom = function (index) {
 
@@ -152,11 +160,14 @@ function prepareGame() {
 
   var table = document.getElementById("board");
   var tdList = Array.from(table.getElementsByTagName("td"));
+  document.getElementById("startButton").setAttribute("style", "display: none;");
+  document.getElementById("gameOptions").setAttribute("style", "display: flex;");
 
   tdList.map((elem, index) => {
     // Set ids to the td elements
     elem.setAttribute("id", index)
     elem.setAttribute("color", "none")
+
 
     // Add the function to the td elements when click
     elem.onclick = async function () {
@@ -176,6 +187,8 @@ function prepareGame() {
     circle.style.backgroundColor = game.playerColor;
     circle.style.opacity = 1;
   })
+
+  stopwatchWorker.postMessage('start');
 }
 
 async function cpu() {
@@ -184,4 +197,37 @@ async function cpu() {
   var changed = await transition(indexes, game.cpuColor);
   matrix[index] = 2;
   (changed) ? game.changeTurn() : alert("Wait your turn");
+}
+
+
+
+const stopwatchWorker = new Worker('stopwatch.js');
+let elapsedTime = 0;
+
+stopwatchWorker.onmessage = function (event) {
+  elapsedTime = event.data;
+  // Update the display of the elapsed time
+  document.getElementById('stopwatch').innerHTML = "Time: " + elapsedTime;
+};
+
+
+function pauseGame() {
+  stopwatchWorker.postMessage('pause');
+  document.getElementById('pauseButton').setAttribute("style", "display: none;");
+  document.getElementById('resumeButton').removeAttribute('style');
+}
+
+function resumeGame() {
+  stopwatchWorker.postMessage('pause');
+  document.getElementById('resumeButton').setAttribute("style", "display: none;");
+  document.getElementById('pauseButton').removeAttribute('style');
+}
+
+function restartGame() {
+  stopwatchWorker.postMessage('stop');
+  document.getElementById('pauseButton').setAttribute("style", "display: none;");
+  document.getElementById('resumeButton').removeAttribute('style');
+  restartMatrix();
+  game = new Game();
+  render();
 }

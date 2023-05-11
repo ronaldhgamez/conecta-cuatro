@@ -1,10 +1,25 @@
 body {
-  background-color: yellowgreen;
+  background-image: linear-gradient(to bottom, darkblue, dodgerblue);
+  background-color: dodgerblue;
+  background-repeat: no-repeat;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.timer-moves {
+  margin: 2% auto;
+  display: flex;
+  justify-content: space-around;
+  width: 550px;
+}
+
+span {
+  font-weight: bold;
+  color: antiquewhite;
 }
 
 .board-container {
   /* center the board container, and at the top 5% */
-  margin: 3% auto;
+  margin: 2% auto;
   display: flex;
   width: 550px;
   height: 530px;
@@ -50,7 +65,7 @@ td:hover {
     0px -10px 15px white,
     /* sombra interna del circulo */
     inset 0px 2px 2px rgba(0, 0, 0, 0.5);
-    /* opacity: 1; */
+  /* opacity: 1; */
 }
 
 td[color="yellow"] {
@@ -74,23 +89,30 @@ td[color="red"] {
 }
 
 .center {
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 550px;
 }
 
 
 #startButton {
   width: 100px;
   height: 40px;
-  background-color: rgb(0, 0, 255);
+  background-color: yellow;
   font-weight: bold;
-  color: white;
-  opacity: 0.8;
+  border: none;
+  box-shadow: 0px 5px 5px rgb(0, 0, 0.5);
 }
 
 #startButton:hover {
-  background-color: dodgerblue;
+  opacity: 0.8;
+}
+
+#startButton:active {
+  box-shadow: -1px 2px 2px rgb(0, 0, 0.5);
+  background-color: yellowgreen;
 }
 
 .circle {
@@ -99,8 +121,32 @@ td[color="red"] {
   height: 50px;
   border-radius: 50%;
   opacity: 0;
-  z-index: 9999; /* valor alto para superponer otros elementos */
-  pointer-events: none; /* permitir que los clics pasen a través del círculo */
+  z-index: 9999;
+  /* valor alto para superponer otros elementos */
+  pointer-events: none;
+  /* permitir que los clics pasen a través del círculo */
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.5),
     inset 0px -3px 3px rgba(255, 255, 255, 0.5);
+}
+
+
+.round-button {
+  width: 60px;
+  height: 60px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  align-items: center;
+  background-color: yellow;
+  border: none;
+  box-shadow: 0px 5px 5px rgb(0, 0, 0.5);
+}
+
+.round-button:hover {
+  opacity: 0.9;
+}
+
+.round-button:active {
+  box-shadow: -1px 2px 2px rgb(0, 0, 0.5);
+  background-color: yellowgreen;
 }
