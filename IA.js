@@ -53,6 +53,7 @@ var matrix = [
 
 
 var n = 7;
+var isOver = false;
 
 var matrix = [
     0, 0, 0, 0, 0, 0, 0,
@@ -751,16 +752,21 @@ function bestOptionToWin(winIndices) {
 // Returns the next appropiate move
 function CPU_IA(cpuColor, rivalColor) {
 
+    if (isOver) {
+        return -1
+    }
+    
     // 1. INITIAL MOVE
     if (isInitialMove(cpuColor) == true) {
         return nextMove(cpuColor, rivalColor); // Pseudo random index choice
     }
-
+    console.clear()
     // 2. VERIFIES IF THE COMPUTER CAN WIN
     var winIndices = {};
     winIndices = searchWinningsIndices(cpuColor);
     if (Object.keys(winIndices).length > 0) {
         alert("Gana la compu :)...");
+        isOver = true;
         return bestOptionToWin(winIndices);
     }
 

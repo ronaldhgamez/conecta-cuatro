@@ -1,97 +1,35 @@
-const states = {
-  INITIAL: 0,
-  INGAME: 1,
-  PAUSED: 2,
-  OVER: 3
-}
-
-const DISKS = {
-  RED: "red",
-  YELLOW: "yellow"
-}
-
-class Game {
-
-  constructor() {
-    this.currentPlayer = DISKS.YELLOW;
-    this.playerColor = DISKS.YELLOW;
-    this.cpuColor = DISKS.RED;
-    this.state = states.INITIAL;
-    this.shape = 7;
-    this.moves = 0;
-  }
-
-  // Generates a random number between 1 and 2
-  setInitialPlayer() {
-    // Genera un número aleatorio entre 1 y 2
-    //const numeroAleatorio = Math.random() + 1;
-    this.currentPlayer = DISKS.YELLOW;
-  }
-
-  insertDisk(index) {
-    if (!isPlayerTurn()) {
-      alert("No es tu turno para actuar");
-      return false;
-    }
-
-    // Aquí iría la lógica para realizar la acción del jugador
-    matrix[index] = (this.currentPlayer == this.playerColor) ? 1 : 2;
-
-    // Luego de que el jugador actúa, se cambia el turno al siguiente jugador
-    this.changeTurn();
-  }
-
-  isPlayerTurn() {
-    return (this.currentPlayer === this.playerColor) ? true : false;
-  }
-
-  async changeTurn() {
-    // Verificamos si el juego ha terminado
-    if (this.gameOver()) {
-      alert("terminado");
-      return;
-    }
-
-    // Change to user's turn
-    if (this.currentPlayer === this.cpuColor) {
-      circle.style.opacity = 1;
-      this.currentPlayer = this.playerColor;
-    }
-    // Computer's turn
-    else {
-      circle.style.opacity = 0;
-      this.currentPlayer = this.cpuColor;
-      game.moves++;
-      document.getElementById('moves').innerHTML = 'Moves: ' + game.moves;
-
-      // Vakes computer move
-      await sleep(1500);
-      cpu();
-    }
-  }
-
-  gameOver() {
-    // Aquí iría la lógica para determinar si el juego ha terminado
-    // (por ejemplo, si un jugador ha ganado o si ya no quedan más movimientos posibles)
-    return (this.state == states.OVER) ? true : false
-  }
-}
-
-
-
-var game = new Game()
-var circle = document.querySelector('.circle');
-
-
 /////////////////////////////////////////////////////////////////////
 // DOM FUNCTIONS
 /////////////////////////////////////////////////////////////////////
 
+var game = new Game()
+
+
+// When page loads verify if user has a nickname
+window.onload = function () {
+  const authuser = localStorage.getItem("authuser");
+  if (!authuser) {
+    var modal = document.getElementById("nicknameModal");
+    modal.style.display = "grid"; // Display nickname modal
+  }
+  // Disable start button if no user entered
+  document.getElementById('startButton').disabled = (authuser) ? false : true;
+}
+
+
+function submitNickname() {
+  var nickname = document.getElementById("nickname-input").value.trim();
+  if (nickname && nickname.length > 1) {
+    localStorage.setItem("authuser", nickname);
+    document.getElementById('startButton').disabled = false;
+  }
+}
+
+
+var circle = document.querySelector('.circle');
 document.addEventListener('mousemove', (e) => {
-  var x = e.pageX - 25;
-  var y = e.pageY - 25;
-  circle.style.left = x + 'px';
-  circle.style.top = y + 'px';
+  circle.style.left = (e.pageX - 25) + 'px';
+  circle.style.top = (e.pageY - 25) + 'px';
 });
 
 function sleep(ms) {
@@ -168,7 +106,6 @@ function prepareGame() {
     elem.setAttribute("id", index)
     elem.setAttribute("color", "none")
 
-
     // Add the function to the td elements when click
     elem.onclick = async function () {
       if (game.isPlayerTurn()) {
@@ -192,11 +129,14 @@ function prepareGame() {
 }
 
 async function cpu() {
-  var index = CPU_IA(2, 1);
-  var indexes = getBottom(index);
-  var changed = await transition(indexes, game.cpuColor);
-  matrix[index] = 2;
-  (changed) ? game.changeTurn() : alert("Wait your turn");
+  if (isOver == false) {
+    var index = CPU_IA(2, 1);
+    var indexes = getBottom(index);
+    var changed = await transition(indexes, game.cpuColor);
+    matrix[index] = 2;
+    (changed) ? game.changeTurn() : alert("Wait your turn");
+  }
+  return isOver
 }
 
 

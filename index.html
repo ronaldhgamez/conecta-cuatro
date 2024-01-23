@@ -2,8 +2,9 @@
 <html>
 
 <head>
-  <title>Connect Four</title>
+  <title>4-In-Line</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="icon" href="favico.ico" type="image/png">
 </head>
 
 <body>
@@ -84,8 +85,8 @@
     </table>
   </div>
 
-  <div id="startButton" class="center">
-    <button id="startButton" onclick="prepareGame()">Start</button>
+  <div class="center">
+    <button id="startButton" onclick="prepareGame()" disabled>Start</button>
   </div>
 
   <div id="gameOptions" class="center" style="display: none;">
@@ -111,6 +112,15 @@
     </button>
   </div>
 
+  <div id="nicknameModal" class="modal">
+    <form class="modal-content" onsubmit="submitNickname()">
+      <h2>Nickname</h2>
+      <input type="text" id="nickname-input" required>
+      <button class="round-button">Save</button>
+    </form>
+  </div>
+
+  <script src="Game.js"></script>
   <script src="IA.js"></script>
   <script src="script.js"></script>
 
