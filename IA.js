@@ -765,7 +765,7 @@ function CPU_IA(cpuColor, rivalColor) {
     var winIndices = {};
     winIndices = searchWinningsIndices(cpuColor);
     if (Object.keys(winIndices).length > 0) {
-        alert("Gana la compu :)...");
+        alert("Computer wins :)...");
         isOver = true;
         return bestOptionToWin(winIndices);
     }

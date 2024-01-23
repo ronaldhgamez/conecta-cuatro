@@ -48,7 +48,7 @@ class Game {
   async changeTurn() {
     // Verificamos si el juego ha terminado
     if (this.state == 3) {
-      alert("terminado");
+      //alert("terminado");
       //return;
     }
 

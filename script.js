@@ -8,12 +8,13 @@ var game = new Game()
 // When page loads verify if user has a nickname
 window.onload = function () {
   const authuser = localStorage.getItem("authuser");
-  if (!authuser) {
+ /*  if (!authuser) {
     var modal = document.getElementById("nicknameModal");
     modal.style.display = "grid"; // Display nickname modal
-  }
+  } */
   // Disable start button if no user entered
   document.getElementById('startButton').disabled = (authuser) ? false : true;
+  document.getElementById('startButton').disabled = false;
 }
 
 
